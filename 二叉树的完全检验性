@@ -1,0 +1,42 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public boolean isCompleteTree(TreeNode root) {
+        if(root == null || (root.left == null && root.right == null)) {
+            return true;
+        }
+        
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while(true) {
+            TreeNode node = queue.remove();//取元素
+            if(node == null) {
+                break;
+            }
+            //不管是不是空都放进队列
+            queue.add(node.left);
+            queue.add(node.right);
+        }
+        //判断队列中剩余的元素又没有非null的情况
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.remove();
+            if(node != null) {
+                return false;
+            } 
+        }
+        return true;
+    }
+}

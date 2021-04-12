@@ -1,0 +1,51 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ import java.util.*;
+class Solution {
+    public List<Integer> arrayToList(int[] arr) {
+        List<Integer> list = new LinkedList<>();
+        for(int e : arr) {
+            list.add(e);
+        }
+        return list;
+    }
+    public TreeNode buildTreeNew (List<Integer> inorderList,List<Integer> postorderList) {
+        if(inorderList.isEmpty()) {
+            return null;
+        }
+        int rootVal = postorderList.get(postorderList.size()-1);
+        TreeNode root = new TreeNode(rootVal);
+        if(inorderList.size() == 1) {
+            return root;
+        }
+        int index = inorderList.indexOf(rootVal);
+        //分割
+        List<Integer> leftIn = inorderList.subList(0,index);
+        List<Integer> rightIn = inorderList.subList(index + 1,inorderList.size());
+        List<Integer> leftPost = postorderList.subList(0,leftIn.size());
+        
+        List<Integer> rightPost = postorderList.subList(leftIn.size(),postorderList.size()-1);
+        
+        root.left = buildTreeNew(leftIn,leftPost);
+        root.right = buildTreeNew(rightIn,rightPost);
+        return root;
+     }
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        List<Integer> inorderList = arrayToList(inorder);
+        List<Integer> postorderList = arrayToList(postorder);
+        return buildTreeNew(inorderList,postorderList);
+    }
+}

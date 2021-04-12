@@ -1,0 +1,53 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ import java.util.*;
+class Solution {
+    public List<Integer> intArrayToList(int[] arr) { //数组转List
+        List<Integer> list = new ArrayList<>();
+        for(int e : arr) {
+            list.add(e);
+        }
+        return list;
+    } 
+    public TreeNode buildTree(List<Integer> preorderList,List<Integer> inorderList){
+        if(preorderList.isEmpty()) {
+            return null;
+        }
+        int rootVal = preorderList.get(0);
+        TreeNode root = new TreeNode(rootVal);
+        if(preorderList.size() == 1) {
+            return root;
+        }
+        int leftSize = inorderList.indexOf(rootVal);
+        //切割
+        //左子树的前序+右子树的前序
+        //左子树的中序+右子树的中序
+        List<Integer> leftPre = preorderList.subList(1,1+leftSize);
+        List<Integer> rightPre = preorderList.subList(1+leftSize,preorderList.size());
+        List<Integer> leftIn = inorderList.subList(0,leftSize);
+        List<Integer> rightIn = inorderList.subList(leftSize + 1,inorderList.size());
+        //分别构建左右子树
+        root.left = buildTree(leftPre,leftIn);
+        root.right = buildTree(rightPre,rightIn);
+        return root;
+    }
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        //不检查两个数组长度是否一致
+        List<Integer> preorderList = intArrayToList(preorder);
+        List<Integer> inorderList = intArrayToList(inorder);
+        return buildTree(preorderList,inorderList);
+    }
+}

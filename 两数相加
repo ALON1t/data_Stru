@@ -1,0 +1,84 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+
+       //先比较长度
+        ListNode cur1 = l1; //默认长
+        ListNode cur2 = l2; //默认短
+        int len1 = 0;
+        int len2 = 0;
+        //比较长短
+        while(cur1 != null) {
+            len1++;
+            cur1 = cur1.next;
+        }
+        cur1 = l1;
+        while(cur2 != null) {
+            len2++;
+            cur2 = cur2.next;
+        }
+        cur2 = l2;
+        int len = len1 - len2;
+        if(len < 0) { //交换
+            cur1 = l2;
+            cur2 = l1;
+            int tmp = len1;
+            len1 = len2;
+            len2 = tmp;
+        }
+        int sum = 0;
+        int flg = 0;
+        ListNode head = cur1;
+        while(cur2 != null && cur1 != null) {
+            sum = cur1.val + cur2.val + flg;
+            if(sum > 9) {
+                if (cur1.next == null) {//考虑一样长的情况
+                    cur1.val = sum % 10 ;
+                    flg = 1;
+                    ListNode tail = new ListNode(0);
+                    cur1.next = tail;
+                    tail.next = null;
+                } else  {
+                    cur1.val = sum % 10 ;
+                    flg = 1;
+                }
+            } else {
+                cur1.val = sum ;
+                flg = 0;
+            }
+            cur1 = cur1.next;
+            cur2 = cur2.next;
+        }
+        if(cur1 != null) {
+            while(cur1 != null) {
+                sum = cur1.val + flg;
+                if(sum > 9 ) {
+                    if (cur1.next == null) {
+                        cur1.val = sum % 10 ;
+                        flg = 1;
+                        ListNode tail = new ListNode(0);
+                        cur1.next = tail;
+                        tail.next = null;
+                    } else {
+                        cur1.val = sum % 10 ;
+                        flg = 1;
+                    }
+                } else {
+                    cur1.val = sum ;
+                    flg = 0;
+                }
+                cur1 = cur1.next;
+            }
+        }
+        return head;
+    }
+}

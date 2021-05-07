@@ -1,0 +1,67 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+ import java.util.*;
+class Solution {
+    //递归
+    public int high1(TreeNode root) {
+        if(root == null) {
+            return 0;
+        }
+        int h = 0;
+        int leftH = high(root.left);
+        int rightH = high(root.right);
+        h = Math.max(leftH,rightH) + 1;
+        return h;
+    }
+    //层序遍历求高度
+    public int high2(TreeNode root) {
+        if(root == null) {
+            return 0;
+        }
+        int h = 0;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()) {
+            int n = queue.size();
+        
+            for(int i = 0; i < n;i++) {
+                TreeNode node = queue.remove();
+                if(node.left != null) {
+                    queue.add(node.left);
+                }
+                if(node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+            h++;
+        }
+        return h;
+    }
+    public boolean isBalanced(TreeNode root) {
+        if(root == null) {
+            return true;
+        }
+        int leftTH = high(root.left);
+        int rightTH = high(root.right);
+        int dif = leftTH - rightTH;
+        if(!(dif == -1 || dif == 0 || dif == 1)) {
+            return false;
+        }
+        boolean leftTree = isBalanced(root.left);
+        boolean rightTree = isBalanced(root.right);
+        return leftTree && rightTree; 
+    }
+}

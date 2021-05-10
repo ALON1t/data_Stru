@@ -1,0 +1,59 @@
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+
+class Solution {
+    public Node copyRandomList(Node head) {
+        //通过遍历老的链表，复制新的链表
+        //同时，记录一个映射关系（老的节点-》新的节点）
+        Map<Node,Node> 老新映射 = new TreeMap<>(new Comparator<Node>(){
+            @Override
+        public int compare(Node o1,Node o2){
+            return o1.hashCode() - o2.hashCode();
+        
+        }
+    });
+    
+        Node cur = head;
+        Node newFakeHead = new Node(-1);
+        Node newLast = newFakeHead;
+        while(cur != null) {
+            Node newNode = new Node(cur.val);
+            newLast.next = newNode;
+            newLast = newNode;
+
+            //建立新老映射关系
+            老新映射.put(cur,newNode);
+            cur = cur.next;
+        }
+
+        //2.专心处理random的指向关系
+        Node oldCur = head;
+        Node newCur = newFakeHead.next;
+        while(oldCur != null) {
+            Node oldRandom = oldCur.random;
+            Node newRandom;
+            if(oldRandom == null) {
+                newRandom = null;
+            } else {
+                newRandom = 老新映射.get(oldRandom);
+            }
+        
+            newCur.random = newRandom;
+            oldCur = oldCur.next;
+            newCur = newCur.next;
+        }
+        return newFakeHead.next;
+    }
+}
